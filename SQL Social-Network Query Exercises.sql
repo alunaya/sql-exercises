@@ -14,5 +14,33 @@ inner join likes on hg1.ID = likes.ID1
 inner join Highschooler hg2 on hg2.ID = likes.ID2
 where (hg1.grade - hg2.grade) >= 2;
 
+-- Q3
+-- 0/1 points (graded)
+-- For every pair of students who both like each other, return the name and grade of both students. Include each pair only once, with the two names in alphabetical order.
+select hg1.name, hg1.grade, hg2.name, hg2.grade
+from highschooler hg1, highschooler hg2
+inner join likes lk1 on hg1.ID = lk1.ID1
+inner join likes lk2 on hg2.ID = lk2.ID1
+where lk1.ID2 = lk2.ID1 AND lk1.ID1 = lk2.ID2 AND hg1.name < hg2.name;-+
+
+-- Q4
+-- 0/1 points (graded)
+-- Find all students who do not appear in the Likes table (as a student who likes or is liked) and return their names and grades. Sort by grade, then by name within each grade.
+Select name, grade
+from highschooler
+where ID not in (
+	select ID1, ID2 from likes
+	union
+	select ID2 from likes
+);
+
+-- Q5
+-- 0/1 points (graded)
+-- For every situation where student A likes student B, but we have no information about whom B likes (that is, B does not appear as an ID1 in the Likes table), return A and B's names and grades.
+select hg1.name, hg1.grade, hg2.name, hg2.grade
+from highschooler hg1, highschooler hg2
+inner join likes lk1 on hg1.ID = lk1.ID1
+left outer join likes lk2 on hg2.ID = lk2.ID1
+where lk2.ID1 is null AND lk1.ID2 = hg2.ID;
 
 
