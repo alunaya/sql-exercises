@@ -21,7 +21,7 @@ select hg1.name, hg1.grade, hg2.name, hg2.grade
 from highschooler hg1, highschooler hg2
 inner join likes lk1 on hg1.ID = lk1.ID1
 inner join likes lk2 on hg2.ID = lk2.ID1
-where lk1.ID2 = lk2.ID1 AND lk1.ID1 = lk2.ID2 AND hg1.name < hg2.name;-+
+where lk1.ID2 = lk2.ID1 AND lk1.ID1 = lk2.ID2 AND hg1.name < hg2.name;
 
 -- Q4
 -- 0/1 points (graded)
@@ -42,5 +42,22 @@ from highschooler hg1, highschooler hg2
 inner join likes lk1 on hg1.ID = lk1.ID1
 left outer join likes lk2 on hg2.ID = lk2.ID1
 where lk2.ID1 is null AND lk1.ID2 = hg2.ID;
+
+-- Q6
+-- 0/1 points (graded)
+-- Find names and grades of students who only have friends in the same grade. Return the result sorted by grade, then by name within each grade.
+select name, grade from highschooler 
+where ID not in
+	(select hg1.ID
+	from highschooler hg1
+	left outer join friend on hg1.ID = friend.ID1
+	inner join highschooler hg2 on hg2.ID = friend.ID2
+	where friend.ID1 is not null and hg1.grade != hg2.grade)
+order by grade, name
+
+-- Q7
+-- 0/1 points (graded)
+-- For each student A who likes a student B where the two are not friends, find if they have a friend C in common (who can introduce them!). For all such trios, return the name and grade of A, B, and C.
+
 
 
